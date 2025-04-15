@@ -47,21 +47,31 @@ class Model(IModel):
     def obter_num_destinatarios(self) -> int:
         return self.num_destinatarios
 
+    # TODO Dev #1 - Criar método para verificar se os dados enviados pela view estão corretos
+    # 1.1 verificar se o número de recipientes não é superior a MAX_NUM_DESTINATARIOS
+    # 1.2 verificar se o número de espaços no texto é pelo menos MIN_TEXT_SPACES
     def validar_dados(texto, num_destinatarios):
         pass
 
     def processar_dados(self):
         pass
 
+    # TODO Dev #1 - Criar método para criar um ficheiro .txt onde o texto com marca d'água será guardado
     def criar_ficheiro(self):
         pass
 
+    # TODO Dev #1 - Criar método para verificar se o ficheiro .txt onde o texto com marca d'água será guardado
+    # foi criado corretamente
+    # Este método pode ser eliminado se a validação for feita no método criar_ficheiro
     def validar_ficheiro(self):
         pass
 
+    # TODO Dev #1 - Criar método para escrever o texto com marca d'água num ficheiro .txt
     def escrever_ficheiro(self):
         pass
 
+    # TODO Dev #1 - Criar método para verificar se o ficheiro .txt foi escrito corretamente
+    # Este método pode ser eliminado se a validação for feita no método escrever_ficheiro
     def validar_escrita(self):
         pass
 
