@@ -46,12 +46,15 @@ class View(IView):
     def __init__(self, model: IModel):
         self.model = model
  
+    # TODO Dev #2 - Substituir o print pelo ecrã de boas-vindas/inicial da aplicação
     def ativar_boas_vindas(self):
         print("Bem-vindo!")
 
+    # TODO Dev #2 - Criar o input visual do texto e número de destinatários
     def rotulo_prompt(self):
         pass
 
+    # TODO Dev #2 - Guardar os dados introduzidos pelo utilizador
     def digitar_dados(self):
         novo_texto = None
         self.model.texto = novo_texto
