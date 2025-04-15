@@ -1,4 +1,4 @@
-from model import IModel
+from MarcaAguaTexto.model.model import IModel
 
 # Interface da classe View
 class IView:

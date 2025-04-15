@@ -1,6 +1,6 @@
-import controller
-import model
-import view
+from MarcaAguaTexto.controller import controller
+from MarcaAguaTexto.model import model
+from MarcaAguaTexto.view import view
 
 # Main
 
