@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
+
 ''' TODO Verificador
 test_main.py
-Ficheiro que contém testes para verificar o
-comportamento de iniciar_programa e da inicialização
+Ficheiro que contï¿½m testes para verificar o
+comportamento de iniciar_programa e da inicializaï¿½ï¿½o
 dos componentes
 controller, model e view
 em MarcaAguaTexto.py'''
