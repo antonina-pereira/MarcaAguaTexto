@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 
 MAX_NUM_DESTINATARIOS = 510
@@ -47,33 +48,55 @@ class Model(IModel):
     def obter_num_destinatarios(self) -> int:
         return self.num_destinatarios
 
-    # TODO Dev #1 - Criar método para verificar se os dados enviados pela view estão corretos
-    # 1.1 verificar se o número de recipientes não é superior a MAX_NUM_DESTINATARIOS
-    # 1.2 verificar se o número de espaços no texto é pelo menos MIN_TEXT_SPACES
-    def validar_dados(texto, num_destinatarios):
-        pass
+    # TODO Dev #1 - Criar mï¿½todo para verificar se os dados enviados pela view estï¿½o corretos
+    # 1.1 verificar se o nï¿½mero de recipientes nï¿½o ï¿½ superior a MAX_NUM_DESTINATARIOS
+    # 1.2 verificar se o nï¿½mero de espaï¿½os no texto ï¿½ pelo menos MIN_TEXT_SPACES
+    def validar_dados(self, texto, num_destinatarios):
+        if num_destinatarios > MAX_NUM_DESTINATARIOS:
+            return False
+        num_espacos = sum(linha.count(" ") for linha in texto)
+        if num_espacos < MIN_TEXT_SPACES:
+            return False
+        return True
 
     def processar_dados(self):
         pass
 
-    # TODO Dev #1 - Criar método para criar um ficheiro .txt onde o texto com marca d'água será guardado
+    # TODO Dev #1 - Criar mï¿½todo para criar um ficheiro .txt onde o texto com marca d'ï¿½gua serï¿½ guardado
     def criar_ficheiro(self):
-        pass
+        try:
+            with open("saida_marca_agua.txt", "w", encoding="utf-8") as f:
+                f.write("")  # Criar ficheiro vazio por agora
+            return True
+        except Exception:
+            return False
 
-    # TODO Dev #1 - Criar método para verificar se o ficheiro .txt onde o texto com marca d'água será guardado
+    # TODO Dev #1 - Criar mï¿½todo para verificar se o ficheiro .txt onde o texto com marca d'ï¿½gua serï¿½ guardado
     # foi criado corretamente
-    # Este método pode ser eliminado se a validação for feita no método criar_ficheiro
+    # Este mï¿½todo pode ser eliminado se a validaï¿½ï¿½o for feita no mï¿½todo criar_ficheiro
     def validar_ficheiro(self):
-        pass
+        return os.path.exists("saida_marca_agua.txt")
 
-    # TODO Dev #1 - Criar método para escrever o texto com marca d'água num ficheiro .txt
+    # TODO Dev #1 - Criar mï¿½todo para escrever o texto com marca d'ï¿½gua num ficheiro .txt
     def escrever_ficheiro(self):
-        pass
+        try:
+            with open("saida_marca_agua.txt", "w", encoding="utf-8") as f:
+                for linha in self.texto:
+                    f.write(linha + "\n")
+            return True
+        except Exception:
+            return False
 
-    # TODO Dev #1 - Criar método para verificar se o ficheiro .txt foi escrito corretamente
-    # Este método pode ser eliminado se a validação for feita no método escrever_ficheiro
+    # TODO Dev #1 - Criar mï¿½todo para verificar se o ficheiro .txt foi escrito corretamente
+    # Este mï¿½todo pode ser eliminado se a validaï¿½ï¿½o for feita no mï¿½todo escrever_ficheiro
     def validar_escrita(self):
-        pass
+        try:
+            with open("saida_marca_agua.txt", "r", encoding="utf-8") as f:
+                linhas = f.readlines()
+            return len(linhas) == len(self.texto)
+        except Exception:
+            return False
 
     def limpar_dados(self):
-        pass
+        self.texto = []
+        self.num_destinatarios = 0
