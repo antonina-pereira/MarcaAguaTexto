@@ -1,4 +1,4 @@
-from MarcaAguaTexto.model.model import IModel
+from MarcaAguaTexto.Model.model import IModel
 
 # Interface da classe View
 class IView:
@@ -46,11 +46,11 @@ class View(IView):
     def __init__(self, model: IModel):
         self.model = model
  
-    # TODO Dev #2 - Substituir o print pelo ecrã de boas-vindas/inicial da aplicação
+    # TODO Dev #2 - Substituir o print pelo ecrï¿½ de boas-vindas/inicial da aplicaï¿½ï¿½o
     def ativar_boas_vindas(self):
         print("Bem-vindo!")
 
-    # TODO Dev #2 - Criar o input visual do texto e número de destinatários
+    # TODO Dev #2 - Criar o input visual do texto e nï¿½mero de destinatï¿½rios
     def rotulo_prompt(self):
         pass
 

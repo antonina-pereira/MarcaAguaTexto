@@ -14,7 +14,7 @@ from unittest.mock import MagicMock
 import MarcaAguaTexto.Model.model
 import MarcaAguaTexto.Controller.controller
 import MarcaAguaTexto.View.view
-import MarcaAguaTexto.MarcaAguaTexto
+import MarcaAguaTexto.main
 
 # Teste para inciar programa
 def test_main():
