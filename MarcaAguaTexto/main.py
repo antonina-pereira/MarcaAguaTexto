@@ -10,4 +10,6 @@ if __name__ == "__main__":
 
     controller = Controller(model, view)
 
+    print("Chamar iniciar_programa()...")  # Debug Dev2
     controller.iniciar_programa()
+    

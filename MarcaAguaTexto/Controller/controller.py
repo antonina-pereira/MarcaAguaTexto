@@ -55,46 +55,10 @@ class Controller:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # DEV2 - Alterei o espaçamento anterior para verificar a def abaixo. -- Nenhuma outra alteração
     def iniciar_programa(self):
         self.view.ativar_boas_vindas()
+        self.view.run()
 
     def ativar_prompt(self):
         pass
