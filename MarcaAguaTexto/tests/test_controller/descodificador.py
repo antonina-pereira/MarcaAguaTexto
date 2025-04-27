@@ -72,4 +72,8 @@ def ler_marca_agua_interpretar_validar_crc(ficheiro_txt):
 if __name__ == "__main__":
     ler_marca_agua_interpretar_validar_crc("../../destinatario_0.txt")
 
+def test_descodificador_leitura_crc():
+    # CF006: Validar aplicação correta do CRC-8 na descodificação
+    ler_marca_agua_interpretar_validar_crc("../../destinatario_0.txt")
+
 

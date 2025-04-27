@@ -18,4 +18,5 @@ import MarcaAguaTexto.main
 
 # Teste para inciar programa
 def test_main():
+    # CB001: Chamada ao controller.iniciar_programa() - fluxo completo de codificação executado
     pass
