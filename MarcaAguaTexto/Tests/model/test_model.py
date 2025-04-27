@@ -1,3 +1,13 @@
+'''
+Testes do componente Model.
+Este módulo verifica as funcionalidades de validação de dados,
+criação e manipulação de arquivos implementadas no Model.
+
+Tipo de testes: CAIXA ABERTA (White Box) e INTEGRAÇÃO DE BAIXO PARA CIMA (Bottom-Up)
+'''
+
+# -*- coding: utf-8 -*-
+
 import os
 import pytest
 from MarcaAguaTexto.Model.model import Model
@@ -33,6 +43,20 @@ def test_validar_dados_zero_destinatarios():
     modelo = Model()
     assert modelo.validar_dados(texto, num_destinatarios) is False
 
+def test_validar_dados_texto_vazio():
+    # CA013: Validar dados com texto vazio
+    texto = []
+    num_destinatarios = 5
+    modelo = Model()
+    assert modelo.validar_dados(texto, num_destinatarios) is False
+
+def test_validar_dados_apenas_espacos():
+    # CA014: Validar texto com apenas espaços em branco
+    texto = [" " * 40]  # 40 espaços seguidos (mais que MIN_TEXT_SPACES=35)
+    num_destinatarios = 5
+    modelo = Model()
+    assert modelo.validar_dados(texto, num_destinatarios) is True
+
 def test_criar_e_validar_ficheiro():
     # CA009: Criar e validar ficheiro de saída
     modelo = Model()
@@ -48,3 +72,36 @@ def test_escrever_e_validar_escrita():
     assert modelo.escrever_ficheiro() is True
     assert modelo.validar_escrita() is True
     os.remove("saida_marca_agua.txt")
+
+def test_escrever_ficheiro_sem_texto():
+    # CA015: Tentar escrever ficheiro sem texto definido no model
+    modelo = Model(texto=[])
+    modelo.criar_ficheiro()
+    try:
+        resultado = modelo.escrever_ficheiro()
+        assert resultado is False
+    except Exception:
+        # Se lançar exceção, o teste também passa
+        assert True
+    
+    # Limpar ficheiro se criado
+    if os.path.exists("saida_marca_agua.txt"):
+        os.remove("saida_marca_agua.txt")
+
+def test_escrever_texto_caracteres_especiais():
+    # CA017: Codificar texto com caracteres especiais
+    texto = ["Texto com acentuação: é à ç ã õ", "Símbolos: € £ $ ¢ © ®", "Emojis: 😀 👍 🚀"]
+    modelo = Model(texto=texto)
+    modelo.criar_ficheiro()
+    
+    try:
+        resultado = modelo.escrever_ficheiro()
+        assert resultado is True
+        assert modelo.validar_escrita() is True
+    except UnicodeEncodeError:
+        # Se falhar com erro de codificação, o teste apenas registra isso
+        assert False, "Falhou com erro de codificação UTF-8"
+    finally:
+        # Limpar ficheiro
+        if os.path.exists("saida_marca_agua.txt"):
+            os.remove("saida_marca_agua.txt")

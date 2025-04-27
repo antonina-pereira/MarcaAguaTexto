@@ -1,6 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Testes unitários para a classe WmkControllerEncoding.
+Testes do componente de codificação da marca d'água (WmkControllerEncoding).
+Este módulo contém testes unitários que verificam a implementação interna
+do codificador responsável pela conversão binária e inserção da marca d'água.
+
+Tipo de testes: CAIXA ABERTA (White Box)
 
 Autor: Carlos Romão (Desenvolvedor #3)
 Data: 16 Abril 2025

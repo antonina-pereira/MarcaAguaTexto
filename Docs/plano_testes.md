@@ -14,9 +14,9 @@ O plano de testes inclui testes de caixa fechada, caixa aberta, integração de 
 | CF002 | ✅ | Executar programa com texto válido e 50 destinatários | Texto com >=50 espaços, número=50 | Ficheiros criados com marca de água | Foi testado a geração de vários ficheiros corretamente |
 | CF003 | ✅ | Executar programa com texto inválido | Texto sem espaços, número=5 | Mensagem de erro para o utilizador | Foi testado mensagens de erro para texto inválido (ex: sem espaços) |
 | CF004 | ❌ | Testar número de destinatários inferior a 1 | Número = 0 | Apresenta erro / bloqueio |   |
-| CF005 | ❌ | Validar inserção correta do marcador de início e fim (sequência 511) | Texto válido | Verificar que o binário com sequência de 9 bits de 1 está inserido |   |
-| CF006 | ❌ | Validar aplicação correta do CRC-8 | Texto e número válidos | Ficheiros contêm código CRC-8 no fim da codificação |   |
-| CF007 | ❌ | Validar codificação correta dos espaços e espaços ininterruptos | Texto e número válidos | Espaços simples são 0, espaços ininterruptos são 1 |   |
+| CF005 | ✅ | Validar inserção correta do marcador de início e fim (sequência 511) | Texto válido | Verificar que o binário com sequência de 9 bits de 1 está inserido |   |
+| CF006 | ✅ | Validar aplicação correta do CRC-8 | Texto e número válidos | Ficheiros contêm código CRC-8 no fim da codificação |   |
+| CF007 | ✅ | Validar codificação correta dos espaços e espaços ininterruptos | Texto e número válidos | Espaços simples são 0, espaços ininterruptos são 1 |   |
 | CF008 | ❌ | Gerar ficheiros corretamente para exatamente 510 destinatários | Número = 510 | 510 ficheiros criados com marca de água correta |   |
 | CF009 | ❌ | Texto insuficiente para codificação de todos os destinatários | Texto com poucos espaços, número alto | Apresentar erro de codificação |   |
 
@@ -38,11 +38,11 @@ O plano de testes inclui testes de caixa fechada, caixa aberta, integração de 
 | CA010 | ✅ | Escrever e validar escrita em ficheiro | Texto com 3 linhas | escrever_ficheiro() e validar_escrita() retornam True |   |
 | CA011 | ✅ | Codificar texto com binário válido | Texto com >= 40 espaços, binário de 9 bits | Retorna string com mesmo comprimento |   |
 | CA012 | ✅ | Erro ao codificar texto com poucos espaços | Texto com 5 espaços, binário de 9 bits | Gera erro do tipo ValueError |   |
-| CA013 | ❌ | Validar dados com texto vazio | texto = [], numero = 5 | Retorna False |   |
-| CA014 | ❌ | Validar texto com apenas espaços em branco | Texto com " " (vários espaços seguidos) | Retorna True | Não sei como será suposto reagir, mas assumo que seja para dar erro? AP - Diria que retorna true porque é possível codificar os espaços |
-| CA015 | ❌ | Tentar escrever ficheiro sem texto definido no model | model.texto_original = [], depois escrever_ficheiro() | Retorna False ou lança exceção |   |
+| CA013 | ✅ | Validar dados com texto vazio | texto = [], numero = 5 | Retorna False |   |
+| CA014 | ✅ | Validar texto com apenas espaços em branco | Texto com " " (vários espaços seguidos) | Retorna True | Não sei como será suposto reagir, mas assumo que seja para dar erro? AP - Diria que retorna true porque é possível codificar os espaços |
+| CA015 | ✅ | Tentar escrever ficheiro sem texto definido no model | model.texto_original = [], depois escrever_ficheiro() | Retorna False ou lança exceção |   |
 | CA016 | ❌ | Codificar texto com número de espaços igual ao necessário | Texto com 9 espaços, binário com 9 bits | Retorna texto com todos os espaços substituídos |   |
-| CA017 | ❌ | Codificar texto com caracteres especiais | Texto com acentos, emojis, símbolos; número = 5 | Codificação é bem-sucedida ou erro esperado | Garante compatibilidade com UTF-8 |
+| CA017 | ✅ | Codificar texto com caracteres especiais | Texto com acentos, emojis, símbolos; número = 5 | Codificação é bem-sucedida ou erro esperado | Garante compatibilidade com UTF-8 |
 
 ---
 
@@ -90,10 +90,3 @@ O plano de testes inclui testes de caixa fechada, caixa aberta, integração de 
 ```bash
 python -m pytest MarcaAguaTexto/tests/
 ```
-
----
-
-## 📈 Estado dos Testes
-
-- ✅ Testes criados e validados: 3
-- ❌ Testes pendentes de criação: 34
