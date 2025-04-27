@@ -57,7 +57,7 @@ class View(IView):
         self.sidebar_frame = None #Mesma coisa -^
         #self.ativar_boas_vindas()
  
-    # TODO Dev #2 - Substituir o print pelo ecr� de boas-vindas/inicial da aplica��o
+    # TODO Dev #2 - Substituir o print pelo ecrã de boas-vindas/inicial da aplicação
     def ativar_boas_vindas(self):
         self.root.title("Equipa6-Python")
         self.root.geometry("600x400")
@@ -103,7 +103,7 @@ class View(IView):
 
         print("Fecho de janela")  # DEBUG Dev2
 
-    # TODO Dev #2 - Criar o input visual do texto e n�mero de destinat�rios
+    # TODO Dev #2 - Criar o input visual do texto e número de destinatários
     def rotulo_prompt(self):
         # Introdução de texto
         label = ttk.Label(self.content_frame, text="Introduza o texto a codificar:")
@@ -175,4 +175,4 @@ class View(IView):
         self.status_label.config(text=f"Os dados submetidos são válidos.")
 
     def mensagem_dados_invalidos(self):
-        self.status_label.config(text=f"Os dados submetidos são inválidos!!") # {text} Adicionar código de erro aqui? 
+        self.status_label.config(text=f"Os dados submetidos são inválidos!!") # {text} Adicionar código de erro aqui?
