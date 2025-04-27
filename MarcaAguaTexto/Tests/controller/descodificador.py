@@ -1,6 +1,8 @@
-# leitor_marca_agua_interpretador_crc.py
-
 from Controller.utils.crc_utils import compute_crc8  # Importar função já existente
+
+def test_descodificador_leitura_crc():
+    # CF006: Validar aplicação correta do CRC-8 na descodificação
+    ler_marca_agua_interpretar_validar_crc("../../destinatario_0.txt")
 
 def ler_marca_agua_interpretar_validar_crc(ficheiro_txt):
     """
@@ -71,5 +73,3 @@ def ler_marca_agua_interpretar_validar_crc(ficheiro_txt):
 # Exemplo de chamada
 if __name__ == "__main__":
     ler_marca_agua_interpretar_validar_crc("../../destinatario_0.txt")
-
-
