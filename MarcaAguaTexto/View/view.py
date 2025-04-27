@@ -48,8 +48,9 @@ class IView:
 
 # Classe View
 class View(IView):
-    def __init__(self, model: IModel):
+    def __init__(self, model: IModel, controller=None):
         self.model = model
+        self.controller = controller  # [Alteração DEV3 - Adicionado controller para ligação ao botão]
         self.root = tk.Tk()
         print("Janela iniciada")  # Debug Dev2
         self.content_frame = None #Inicializar global em vez de local para que os elementos possam ser adicionados
@@ -132,15 +133,28 @@ class View(IView):
 
     # ---------------------------------------TESTE de funcionamento do botão || necessário realocar código para o apropriado ->> "command="--------------
     def start_watermarking(self):
-        """Gerir o processo de watermarking (para ser implementado)."""
-        text = self.text_input.get("1.0", tk.END).strip()  # Input do texto a codificar
+        """
+        Inicia o processo de marca de água no texto.
+        Atualização DEV3: Agora chama o Controller para codificar.
+        """
+        text = self.text_input.get("1.0", tk.END).strip()
         if not text:
             self.status_label.config(text="Nada introduzido!")
             return
-        
-        self.status_label.config(text=f"WM iniciado para: {text}")
-        # TODO: Chamar a função respetiva.
-    #------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        # Guardar texto introduzido no Model
+        lines = text.split("\n")
+        self.model.texto = lines
+        self.model.num_destinatarios = 1  # [Placeholder] número fixo; futuro input do utilizador
+
+        self.status_label.config(text=f"WM iniciado: {text[:20]}...")
+
+        # Chamar a função de codificação no Controller
+        if self.controller:
+            self.controller.codificar_texto()
+
+        # DEBUG TEMP DEV3
+        print(f"Número de espaços no texto: {sum(linha.count(' ') for linha in self.model.texto)}")
 
     def dados_submetidos(self):
         self.status_label.config(text=f"Dados submetidos!") # Assumo que isto será mensagem uma vez que existe submeter_dados 

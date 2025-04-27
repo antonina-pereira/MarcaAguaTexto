@@ -16,6 +16,7 @@ class Controller:
         self.view = view
         self.encoder = WmkControllerEncoding()
 
+    # [Alteração DEV3 - Corrigido método duplicado]
     def codificar_texto(self):
         """
         Executa o processo de codificação do texto para todos os destinatários,
@@ -23,11 +24,14 @@ class Controller:
 
         Para cada destinatário:
         - Converte o número para binário (9 bits)
-        - Codifica o texto com o binário
-        - (Para já) imprime o resultado no terminal
-        - (Futuramente) delega a criação de ficheiros ao model
+        - Codifica o texto com o binário, marcadores e CRC
+        - Gera um ficheiro .txt separado para cada destinatário com o texto codificado
 
         Em caso de erro, chama a view para notificar falha.
+
+        [Nota DEV3 - Provisório]
+        Esta geração de ficheiros é provisória para validação da codificação.
+        Posteriormente será integrada de forma oficial no Model pela equipa.
         """
         try:
             # Obtém o texto original como string (a partir de uma lista de palavras)
@@ -41,8 +45,13 @@ class Controller:
                 # Codifica o texto com o binário, marcadores e CRC
                 texto_codificado = self.encoder.encode_binary_into_text(texto_original, binario)
 
+                # NOVO: Cria um ficheiro de texto separado para cada destinatário
+                nome_ficheiro = f"destinatario_{destinatario}.txt"
+                with open(nome_ficheiro, "w", encoding="utf-8") as f:
+                    f.write(texto_codificado)
+
                 # Mostra uma parte do texto codificado no terminal (para testes)
-                print(f"[Destinatário {destinatario}] Texto codificado:")
+                print(f"[Destinatário {destinatario}] Ficheiro '{nome_ficheiro}' criado com texto codificado.")
                 print(texto_codificado[:100] + "...\n")
 
             # Notifica sucesso à vista
@@ -51,9 +60,6 @@ class Controller:
         except Exception as e:
             print(f"Erro na codificação: {e}")
             self.view.mensagem_dados_invalidos()
-
-
-
 
     # DEV2 - Alterei o espaçamento anterior para verificar a def abaixo. -- Nenhuma outra alteração
     def iniciar_programa(self):
@@ -67,9 +73,6 @@ class Controller:
         pass
 
     def dados_invalidos(self):
-        pass
-
-    def codificar_texto(self):
         pass
 
     def programa_encerrado(self):

@@ -7,8 +7,9 @@ from MarcaAguaTexto.View.view import View
 if __name__ == "__main__":
     model = Model()
     view = View(model)
-
     controller = Controller(model, view)
+
+    view.controller = controller  # [Alteração DEV3 - Ligação entre View e Controller]
 
     print("Chamar iniciar_programa()...")  # Debug Dev2
     controller.iniciar_programa()
