@@ -26,6 +26,13 @@ def test_validar_dados_poucos_espacos():
     modelo = Model()
     assert modelo.validar_dados(texto, num_destinatarios) is False
 
+def test_validar_dados_zero_destinatarios():
+    # CF004: Testar número de destinatários inferior a 1
+    texto = ["texto com espaços suficientes"]
+    num_destinatarios = 0
+    modelo = Model()
+    assert modelo.validar_dados(texto, num_destinatarios) is False
+
 def test_criar_e_validar_ficheiro():
     # CA009: Criar e validar ficheiro de saída
     modelo = Model()
