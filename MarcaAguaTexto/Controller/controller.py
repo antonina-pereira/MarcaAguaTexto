@@ -2,6 +2,7 @@ from Model.model import IModel
 from View.view import IView
 
 from Controller.wmk_controller_encoding import WmkControllerEncoding
+import os
 
 # Classe Controller
 class Controller:
@@ -15,6 +16,7 @@ class Controller:
         self.model = model
         self.view = view
         self.encoder = WmkControllerEncoding()
+        self.output_directory = "Saida"  # Tester: Diretório de saída para os ficheiros codificados
 
     # [Alteração DEV3 - Corrigido método duplicado]
     def codificar_texto(self):
@@ -46,7 +48,9 @@ class Controller:
                 texto_codificado = self.encoder.encode_binary_into_text(texto_original, binario)
 
                 # NOVO: Cria um ficheiro de texto separado para cada destinatário
-                nome_ficheiro = f"destinatario_{destinatario}.txt"
+                # TESTER: Usa a pasta definida na classe. Se não existir, cria
+                os.makedirs(self.output_directory, exist_ok=True)
+                nome_ficheiro = os.path.join(self.output_directory, f"destinatario_{destinatario}.txt")
                 with open(nome_ficheiro, "w", encoding="utf-8") as f:
                     f.write(texto_codificado)
 
