@@ -18,7 +18,19 @@ class Controller:
         self.encoder = WmkControllerEncoding()
         self.output_directory = "Saida"  # Tester: Diretório de saída para os ficheiros codificados
 
-    # [Alteração DEV3 - Corrigido método duplicado]
+    # DEV2 - Alterei o espaçamento anterior para verificar a def abaixo. -- Nenhuma outra alteração
+    def iniciar_programa(self):
+        self.view.ativar_boas_vindas()
+        self.view.run()
+
+    def receber_dados_submetidos(self, texto, num_destinatarios):
+        # Atualiza o Model
+        self.model.texto = texto.split("\n")
+        self.model.num_destinatarios = int(num_destinatarios)
+        # Inicia a codificação
+        self.codificar_texto()
+
+        # [Alteração DEV3 - Corrigido método duplicado]
     def codificar_texto(self):
         """
         Executa o processo de codificação do texto para todos os destinatários,
@@ -59,25 +71,13 @@ class Controller:
                 print(texto_codificado[:100] + "...\n")
 
             # Notifica sucesso à vista
-            self.view.mensagem_sucesso()
+            self.view.mostrar_msg_sucesso()
 
         except Exception as e:
             print(f"Erro na codificação: {e}")
-            self.view.mensagem_dados_invalidos()
-
-    # DEV2 - Alterei o espaçamento anterior para verificar a def abaixo. -- Nenhuma outra alteração
-    def iniciar_programa(self):
-        self.view.ativar_boas_vindas()
-        self.view.run()
-
-    def ativar_prompt(self):
-        pass
-
-    def dados_validos(self):
-        pass
-
-    def dados_invalidos(self):
-        pass
+            self.view.mostrar_msg_dados_invalidos()
 
     def programa_encerrado(self):
-        pass
+        self.view.mostrar_msg_final()
+        if hasattr(self.view, "root") and self.view.root is not None:
+            self.view.root.destroy()

@@ -10,40 +10,31 @@ class IView:
     def ativar_boas_vindas(self):
         raise NotImplementedError
 
-    def rotulo_prompt(self):
+    def ativar_rotulo_prompt(self):
         raise NotImplementedError
 
-    def digitar_dados(self):
-        raise NotImplementedError
-
-    def chegou_dados(self):
-        raise NotImplementedError
-
-    def rotulo_dados(self):
+    def ativar_rotulo_dados(self):
         raise NotImplementedError
 
     def submeter_dados(self):
         raise NotImplementedError
 
-    def dados_submetidos(self):
+    def notificar_dados_submetidos(self):
+         raise NotImplementedError
+
+    def mostrar_msg_em_curso(self):
         raise NotImplementedError
 
-    def mensagem_em_curso(self):
+    def mostrar_msg_sucesso(self):
         raise NotImplementedError
 
-    def validar_dados(self):
+    def mostrar_msg_dados_validos(self):
         raise NotImplementedError
 
-    def codificacao_terminou(self):
+    def mostrar_msg_dados_invalidos(self):
         raise NotImplementedError
 
-    def mensagem_sucesso(self):
-        raise NotImplementedError
-
-    def mensagem_dados_validos(self):
-        raise NotImplementedError
-
-    def mensagem_dados_invalidos(self):
+    def mostrar_msg_final(self):
         raise NotImplementedError
 
 # Classe View
@@ -63,6 +54,74 @@ class View(IView):
         self.root.geometry("600x400")
         self.root.resizable(False, False)
         self.root.configure(bg="#2E2E2E")
+
+        # secção para estilos dos widgets
+        style = ttk.Style()
+        style.configure("TLabel", background="#2E2E2E", foreground="white", font=("Arial", 12))
+        style.configure("TText", background="#444444", foreground="white")
+
+        # Painel esquerdo (botoes)
+        self.sidebar_frame = tk.Frame(self.root, width=200, bg="#333333")
+        self.sidebar_frame.grid(row=0, column=0, rowspan=1, sticky="nsew")
+
+        # Painel direito (conteudo)
+        self.content_frame = tk.Frame(self.root, width=400, bg="#2E2E2E")
+        self.content_frame.grid(row=0, column=1, sticky="nsew")
+
+        # configuracao do layout em grid
+        self.root.grid_rowconfigure(0, weight=1)
+        self.root.grid_columnconfigure(0, weight=1, minsize=200)
+        self.root.grid_columnconfigure(1, weight=3, minsize=400)
+
+        # Etiqueta de identificação App
+        title_label = ttk.Label(self.sidebar_frame, text="MarcaAguaTexto", font=("Arial", 12, "bold"))
+        title_label.pack(pady=(20, 10))
+
+        # Limpa o painel de conteúdo antes de mostrar a tela de boas-vindas
+        for widget in self.content_frame.winfo_children():
+            widget.destroy()
+
+        # Ecrã de boas-vindas
+        welcome_label = ttk.Label(
+            self.content_frame,
+            text="Bem-vindo(a) ao MarcaAguaTexto!",
+            font=("Arial", 16, "bold"),
+            background="#2E2E2E",
+            foreground="white"
+        )
+        welcome_label.pack(pady=(60, 10))
+
+        info_label = ttk.Label(
+            self.content_frame,
+            text="Esta aplicação permite introduzir uma marca de água não visível ao olho humando em ficheiros de texto.",
+            font=("Arial", 12),
+            background="#2E2E2E",
+            foreground="white",
+            justify="center",
+            wraplength=360
+        )
+        info_label.pack(pady=(0, 30))
+
+        start_button = tk.Button(
+            self.content_frame,
+            text="Começar",
+            command=self.mostrar_formulario_principal,
+            bg="#808080",
+            fg="white",
+            width=20,
+            height=2
+        )
+        start_button.pack()
+
+    def mostrar_formulario_principal(self):
+        # Limpa o painel de conteúdo e mostra o formulário principal
+        for widget in self.content_frame.winfo_children():
+            widget.destroy()
+        self.status_label = ttk.Label(self.content_frame, text="", font=("Arial", 12))
+        self.status_label.pack(pady=10)
+        self.status_label.config(text="Bem-Vind@!")
+        self.ativar_rotulo_prompt()
+        self.submeter_dados()
 
         #secção para estilos dos widgets
         style = ttk.Style()
@@ -93,7 +152,7 @@ class View(IView):
         self.status_label.config(text="Bem-Vind@!")
 
         print("A inserir elemento1-input texto na janela")  # DEBUG Dev2
-        self.rotulo_prompt()    # Elemento de inserção de texto
+        self.ativar_rotulo_prompt()    # Elemento de inserção de texto
         print("A inserir elemento2-botao iniciar na janela")  # DEBUG Dev2
         self.submeter_dados()   # Botão de Inicio
         
@@ -104,7 +163,7 @@ class View(IView):
         print("Fecho de janela")  # DEBUG Dev2
 
     # TODO Dev #2 - Criar o input visual do texto e número de destinatários
-    def rotulo_prompt(self):
+    def ativar_rotulo_prompt(self):
         # Introdução de texto
         label = ttk.Label(self.content_frame, text="Introduza o texto a codificar:")
         label.pack(pady=(20, 5))
@@ -112,67 +171,64 @@ class View(IView):
         self.text_input = tk.Text(self.content_frame, wrap="word", height=4, width=80, bg="#444444", fg="white", insertbackground="white")
         self.text_input.pack(pady=1, padx=20)
 
+        # Campo para número de destinatários
+        num_label = ttk.Label(self.content_frame, text="Número de destinatários:")
+        num_label.pack(pady=(10, 2))
+        self.num_destinatarios_input = tk.Entry(self.content_frame, width=10, bg="#444444", fg="white", insertbackground="white")
+        self.num_destinatarios_input.pack(pady=(0, 10))
 
-    # TODO Dev #2 - Guardar os dados introduzidos pelo utilizador 
-    # <<<----- Tenho dúvidas na implementação, é para guardar em memória? ficheiro.txt? Confundi com a função acima e fiz tudo na mesma função?
-    def digitar_dados(self):
-        novo_texto = None
-        self.model.texto = novo_texto
-        novo_num_destinatarios = 0
-        self.model.num_destinatarios = novo_num_destinatarios
+    def ativar_rotulo_dados(self):
+        # Apresentar o texto e o número de destinatários ao utilizador
+        resumo = f"Texto submetido:\n{self.model.texto}\n\nNúmero de destinatários: {self.model.num_destinatarios}"
+        # Se já existir um label de resumo, destrua-o antes de criar outro
+        if hasattr(self, 'resumo_label') and self.resumo_label.winfo_exists():
+            self.resumo_label.destroy()
+        self.resumo_label = ttk.Label(
+            self.content_frame,
+            text=resumo,
+            background="#2E2E2E",
+            foreground="white",
+            font=("Arial", 11),
+            justify="left",
+            wraplength=360
+        )
+        self.resumo_label.pack(pady=(10, 10))
 
-    def chegou_dados(self):
-        pass
-
-    def rotulo_dados(self):
-        pass
 
     def submeter_dados(self):
-        start_button = tk.Button(self.sidebar_frame, text="Iniciar WM", command=self.start_watermarking, bg="#808080", fg="white", width=20, height=2)
+        start_button = tk.Button(self.sidebar_frame, text="Iniciar WM", command=self.notificar_dados_submetidos, bg="#808080", fg="white", width=20, height=2)
         start_button.pack(pady=10)
 
     # ---------------------------------------TESTE de funcionamento do botão || necessário realocar código para o apropriado ->> "command="--------------
-    def start_watermarking(self):
+    def notificar_dados_submetidos(self):
         """
         Inicia o processo de marca de água no texto.
         Atualização DEV3: Agora chama o Controller para codificar.
         """
-        text = self.text_input.get("1.0", tk.END).strip()
-        if not text:
+        texto = self.text_input.get("1.0", tk.END).strip()
+        num_destinatarios = self.num_destinatarios_input.get()
+        if not texto:
             self.status_label.config(text="Nada introduzido!")
             return
 
-        # Guardar texto introduzido no Model
-        lines = text.split("\n")
-        self.model.texto = lines
-        self.model.num_destinatarios = 1  # [Placeholder] número fixo; futuro input do utilizador
-
-        self.status_label.config(text=f"WM iniciado: {text[:20]}...")
-
-        # Chamar a função de codificação no Controller
+        # Notifica o controller, passando os dados
         if self.controller:
-            self.controller.codificar_texto()
+            self.controller.receber_dados_submetidos(texto, num_destinatarios)
 
         # DEBUG TEMP DEV3
         print(f"Número de espaços no texto: {sum(linha.count(' ') for linha in self.model.texto)}")
 
-    def dados_submetidos(self):
-        self.status_label.config(text=f"Dados submetidos!") # Assumo que isto será mensagem uma vez que existe submeter_dados 
-
-    def mensagem_em_curso(self):
+    def mostrar_msg_em_curso(self):
         self.status_label.config(text=f"Operação em curso...")
 
-    def validar_dados(self):
-        pass
-
-    def codificacao_terminou(self):
-        self.status_label.config(text=f"Codificação concluída.")
-
-    def mensagem_sucesso(self):
+    def mostrar_msg_sucesso(self):
         self.status_label.config(text=f"Concluído com sucesso.")
 
-    def mensagem_dados_validos(self):
+    def mostrar_msg_dados_validos(self):
         self.status_label.config(text=f"Os dados submetidos são válidos.")
 
-    def mensagem_dados_invalidos(self):
-        self.status_label.config(text=f"Os dados submetidos são inválidos!!") # {text} Adicionar código de erro aqui?
+    def mostrar_msg_dados_invalidos(self):
+        self.status_label.config(text=f"Os dados submetidos são inválidos.") # {text} Adicionar código de erro aqui?
+
+    def mostrar_msg_final(self):
+        self.status_label.config(text=f"Programa a encerrar...")

@@ -18,10 +18,7 @@ class IModel(ABC):
     def validar_dados(self):
         raise NotImplementedError
 
-    def processar_dados(self):
-        raise NotImplementedError
-
-    def criar_ficheiros(self):
+    def criar_ficheiro(self):
         raise NotImplementedError
 
     def validar_ficheiro(self):
@@ -31,6 +28,9 @@ class IModel(ABC):
         raise NotImplementedError
 
     def validar_escrita(self):
+        raise NotImplementedError
+
+    def notificar_codificacao_terminada(self):
         raise NotImplementedError
 
     def limpar_dados(self):
@@ -58,9 +58,6 @@ class Model(IModel):
         if num_espacos < MIN_TEXT_SPACES:
             return False
         return True
-
-    def processar_dados(self):
-        pass
 
     # TODO Dev #1 - Criar método para criar um ficheiro .txt onde o texto com marca d'água será guardado
     def criar_ficheiro(self):
@@ -96,6 +93,9 @@ class Model(IModel):
             return len(linhas) == len(self.texto)
         except Exception:
             return False
+
+    def notificar_codificacao_terminada(self):
+        pass
 
     def limpar_dados(self):
         self.texto = []
