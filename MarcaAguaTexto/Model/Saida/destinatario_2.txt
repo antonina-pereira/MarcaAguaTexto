@@ -1,0 +1,1 @@
+Projeto de simulação empresarial desenvolvido no âmbito da unidade curricular Laboratório de Desenvolvimento de Software (Licenciatura em Engenharia Informática, Universidade Aberta – Portugal).  O objetivo deste projeto é desenvolver uma aplicação capaz de introduzir uma marca de água não visível ao olho humando em ficheiros de texto.

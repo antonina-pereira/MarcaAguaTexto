@@ -18,29 +18,16 @@ class IModel(ABC):
     def validar_dados(self):
         raise NotImplementedError
 
-    def criar_ficheiro(self):
-        raise NotImplementedError
-
-    def validar_ficheiro(self):
-        raise NotImplementedError
-
     def escrever_ficheiro(self):
-        raise NotImplementedError
-
-    def validar_escrita(self):
-        raise NotImplementedError
-
-    def notificar_codificacao_terminada(self):
-        raise NotImplementedError
-
-    def limpar_dados(self):
         raise NotImplementedError
 
 # Classe Model
 class Model(IModel):
-    def __init__(self, texto = None, num_destinatarios = 0):
+    def __init__(self, texto = None, num_destinatarios = 0, output_directory="MarcaAguaTexto/Saida"):
         self.texto = texto if texto is not None else []
         self.num_destinatarios = num_destinatarios
+        self.output_directory = output_directory
+
 
     def obter_texto(self) -> list:
         return self.texto
@@ -52,51 +39,29 @@ class Model(IModel):
     # 1.1 verificar se o número de recipientes não é superior a MAX_NUM_DESTINATARIOS
     # 1.2 verificar se o número de espaços no texto é pelo menos MIN_TEXT_SPACES
     def validar_dados(self, texto, num_destinatarios):
-        if num_destinatarios > MAX_NUM_DESTINATARIOS:
+        # Verifica se num_destinatarios é um número
+        try:
+            num_destinatarios_int = int(num_destinatarios)
+        except (ValueError, TypeError):
             return False
+
+        if num_destinatarios_int > MAX_NUM_DESTINATARIOS:
+            return False
+
         num_espacos = sum(linha.count(" ") for linha in texto)
         if num_espacos < MIN_TEXT_SPACES:
             return False
         return True
 
     # TODO Dev #1 - Criar método para criar um ficheiro .txt onde o texto com marca d'água será guardado
-    def criar_ficheiro(self):
+    def escrever_ficheiro(self, destinatario, texto_codificado):
         try:
-            with open("saida_marca_agua.txt", "w", encoding="utf-8") as f:
-                f.write("")  # Criar ficheiro vazio por agora
-            return True
-        except Exception:
-            return False
-
-    # TODO Dev #1 - Criar método para verificar se o ficheiro .txt onde o texto com marca d'água será guardado
-    # foi criado corretamente
-    # Este método pode ser eliminado se a validação for feita no método criar_ficheiro
-    def validar_ficheiro(self):
-        return os.path.exists("saida_marca_agua.txt")
-
-    # TODO Dev #1 - Criar método para escrever o texto com marca d'água num ficheiro .txt
-    def escrever_ficheiro(self):
-        try:
-            with open("saida_marca_agua.txt", "w", encoding="utf-8") as f:
-                for linha in self.texto:
-                    f.write(linha + "\n")
-            return True
-        except Exception:
-            return False
-
-    # TODO Dev #1 - Criar método para verificar se o ficheiro .txt foi escrito corretamente
-    # Este método pode ser eliminado se a validação for feita no método escrever_ficheiro
-    def validar_escrita(self):
-        try:
-            with open("saida_marca_agua.txt", "r", encoding="utf-8") as f:
-                linhas = f.readlines()
-            return len(linhas) == len(self.texto)
-        except Exception:
-            return False
-
-    def notificar_codificacao_terminada(self):
-        pass
-
-    def limpar_dados(self):
-        self.texto = []
-        self.num_destinatarios = 0
+            os.makedirs(self.output_directory, exist_ok=True)
+            nome_ficheiro = os.path.join(self.output_directory, f"destinatario_{destinatario}.txt")
+            with open(nome_ficheiro, "w", encoding="utf-8") as f:
+                f.write(texto_codificado)
+                # Mostra uma parte do texto codificado no terminal (para testes)
+                print(f"[Destinatário {destinatario}] Ficheiro '{nome_ficheiro}' criado com texto codificado.")
+                print(texto_codificado[:100] + "...\n")
+        except Exception as e:
+            print(f"Erro ao escrever ficheiro: {e}")

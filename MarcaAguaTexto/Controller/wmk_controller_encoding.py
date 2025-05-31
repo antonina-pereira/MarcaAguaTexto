@@ -11,7 +11,7 @@ Este módulo contém as funções responsáveis por:
 - Inserir a marca binária no texto original, usando espaços e espaços ininterruptos
 """
 
-from Controller.utils.crc_utils import compute_crc8
+from MarcaAguaTexto.Controller.utils.crc_utils import compute_crc8
 
 class WmkControllerEncoding:
     def __init__(self):

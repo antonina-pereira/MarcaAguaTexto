@@ -3,7 +3,6 @@ from MarcaAguaTexto.Model.model import IModel
 import tkinter as tk
 from tkinter import ttk
 from tkinter import PhotoImage
-import os
 
 # Interface da classe View
 class IView:
