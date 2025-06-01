@@ -5,7 +5,7 @@ from MarcaAguaTexto.Controller.wmk_controller_encoding import WmkControllerEncod
 
 # Classe Controller
 class Controller:
-    def __init__(self, model: IModel, view: IView):
+    def __init__(self, model: IModel):
         """
         Inicializa o controlador com o modelo, a vista e o codificador.
 
@@ -13,9 +13,11 @@ class Controller:
         :param view: instância da classe View
         """
         self.model = model
-        self.view = view
+        self.view = None
         self.encoder = WmkControllerEncoding()
-        #self.output_directory = "Saida"  # Tester: Diretório de saída para os ficheiros codificados
+
+    def set_view(self, view: IView):
+        self.view = view
 
     # DEV2 - Alterei o espaçamento anterior para verificar a def abaixo. -- Nenhuma outra alteração
     def iniciar_programa(self):

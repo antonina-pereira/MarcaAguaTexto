@@ -38,14 +38,13 @@ class IView:
 
 # Classe View
 class View(IView):
-    def __init__(self, model: IModel, controller=None):
+    def __init__(self, model: IModel, controller=None, on_submit_callback=None):
         self.model = model
-        self.controller = controller  # [Alteração DEV3 - Adicionado controller para ligação ao botão]
         self.root = tk.Tk()
         print("Janela iniciada")  # Debug Dev2
         self.content_frame = None #Inicializar global em vez de local para que os elementos possam ser adicionados
         self.sidebar_frame = None #Mesma coisa -^
-        #self.ativar_boas_vindas()
+        self.on_submit_callback = on_submit_callback
  
     # TODO Dev #2 - Substituir o print pelo ecrã de boas-vindas/inicial da aplicação
     def ativar_boas_vindas(self):
@@ -209,10 +208,10 @@ class View(IView):
         if not texto:
             self.status_label.config(text="Nada introduzido!")
             return
-
-        # Notifica o controller, passando os dados
-        if self.controller:
-            self.controller.receber_dados_submetidos(texto, num_destinatarios)
+                
+        # Se o callback estiver definido, chama-o
+        if self.on_submit_callback:
+            self.on_submit_callback(texto, num_destinatarios)
 
         # DEBUG TEMP DEV3
         print(f"Número de espaços no texto: {sum(linha.count(' ') for linha in self.model.texto)}")

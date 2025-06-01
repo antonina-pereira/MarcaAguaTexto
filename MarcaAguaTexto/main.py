@@ -6,10 +6,13 @@ from MarcaAguaTexto.View.view import View
 
 if __name__ == "__main__":
     model = Model()
-    view = View(model)
-    controller = Controller(model, view)
+    #view = View(model)
+    controller = Controller(model)
+    view = View(model, on_submit_callback=controller.receber_dados_submetidos)
 
-    view.controller = controller  # [Alteração DEV3 - Ligação entre View e Controller]
+    controller.set_view(view)  
+
+    #view.controller = controller  # [Alteração DEV3 - Ligação entre View e Controller]
 
     print("Chamar iniciar_programa()...")  # Debug Dev2
     controller.iniciar_programa()
