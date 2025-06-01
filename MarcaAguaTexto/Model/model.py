@@ -27,7 +27,14 @@ class Model(IModel):
         self.texto = texto if texto is not None else []
         self.num_destinatarios = num_destinatarios
         self.output_directory = output_directory
+        self._observadores = []
 
+    def adicionar_observador(self, callback):
+        self._observadores.append(callback)
+
+    def notificar_observadores(self, evento, **kwargs):
+        for callback in self._observadores:
+            callback(evento, **kwargs)
 
     def obter_texto(self) -> list:
         return self.texto
@@ -42,15 +49,21 @@ class Model(IModel):
         # Verifica se num_destinatarios é um número
         try:
             num_destinatarios_int = int(num_destinatarios)
-        except (ValueError, TypeError):
-            return False
+        except Exception as e:
+            #return False
+            self.notificar_observadores(evento="erro_num_destinatarios", erro="Adicionar um número no campo dos destinatários.")
 
-        if num_destinatarios_int > MAX_NUM_DESTINATARIOS:
+        self.num_destinatarios = num_destinatarios_int
+        
+        if not (1 <= num_destinatarios_int < MAX_NUM_DESTINATARIOS):
+            self.notificar_observadores(evento="erro_num_destinatarios", erro=f"Número de destinatários tem de estar entre 1 e 509.")
             return False
 
         num_espacos = sum(linha.count(" ") for linha in texto)
         if num_espacos < MIN_TEXT_SPACES:
+            self.notificar_observadores(evento="erro_texto", erro="Número de espaços no texto insuficiente.")
             return False
+        self.notificar_observadores(evento="dados_validos")
         return True
 
     # TODO Dev #1 - Criar método para criar um ficheiro .txt onde o texto com marca d'água será guardado
@@ -64,4 +77,4 @@ class Model(IModel):
                 print(f"[Destinatário {destinatario}] Ficheiro '{nome_ficheiro}' criado com texto codificado.")
                 print(texto_codificado[:100] + "...\n")
         except Exception as e:
-            print(f"Erro ao escrever ficheiro: {e}")
+            self.notificar_observadores(evento="erro_escrita", erro=str(e))

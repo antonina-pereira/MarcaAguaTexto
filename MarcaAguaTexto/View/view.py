@@ -225,8 +225,11 @@ class View(IView):
     def mostrar_msg_dados_validos(self):
         self.status_label.config(text=f"Os dados submetidos são válidos.")
 
-    def mostrar_msg_dados_invalidos(self):
-        self.status_label.config(text=f"Os dados submetidos são inválidos.") # {text} Adicionar código de erro aqui?
+    def mostrar_msg_dados_invalidos(self, msg_erro):
+        self.status_label.config(text=f"{msg_erro}")
+
+    def mostrar_msg_erro_na_codificacao(self):
+        self.status_label.config(text=f"Ocorreu um erro na codificação.")
 
     def mostrar_msg_final(self):
         self.status_label.config(text=f"Programa a encerrar...")

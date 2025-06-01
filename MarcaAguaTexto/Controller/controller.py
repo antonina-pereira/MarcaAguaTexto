@@ -8,13 +8,36 @@ class Controller:
     def __init__(self, model: IModel):
         """
         Inicializa o controlador com o modelo, a vista e o codificador.
-
         :param model: instância da classe Model
         :param view: instância da classe View
         """
         self.model = model
+        self.model.adicionar_observador(self.evento_modelo)
         self.view = None
         self.encoder = WmkControllerEncoding()
+
+    def evento_modelo(self, evento, **kwargs):
+        """
+        Método para lidar com eventos do modelo e notificar a vista.
+        :param evento: evento disparado pelo modelo
+        :param kwargs: argumentos adicionais do evento
+        """
+        msg_erro = kwargs.get("erro", "")
+        # Verifica o tipo de evento e chama o método correspondente na vista
+        if evento == "dados_validos":
+            self.view.mostrar_msg_dados_validos()
+        elif evento == "erro_num_destinatarios":
+            self.view.mostrar_msg_dados_invalidos(msg_erro)
+            # Encerra o programa se os dados forem inválidos
+            self.view.root.after(3000, self.programa_encerrado)
+        elif evento == "erro_texto":
+            self.view.mostrar_msg_dados_invalidos(msg_erro)
+            # Encerra o programa se os dados forem inválidos
+            self.view.root.after(3000, self.programa_encerrado)
+        elif evento == "erro_escrita":
+            self.view.mostrar_msg_erro_na_codificacao()
+            self.programa_encerrado()
+
 
     def set_view(self, view: IView):
         self.view = view
@@ -25,19 +48,30 @@ class Controller:
         self.view.run()
 
     def receber_dados_submetidos(self, texto, num_destinatarios):
-        # Valida os dados submetidos
-        if(not self.model.validar_dados(texto, num_destinatarios)):
-            self.view.mostrar_msg_dados_invalidos()
-            # Encerra o programa se os dados forem inválidos
-            self.view.root.after(3000, self.programa_encerrado)
-            return
+        # # Valida os dados submetidos
+        # if(not self.model.validar_dados(texto, num_destinatarios)):
+        #     self.view.mostrar_msg_dados_invalidos()
+        #     # Encerra o programa se os dados forem inválidos
+        #     self.view.root.after(3000, self.programa_encerrado)
+        #     return
         
-        self.view.mostrar_msg_dados_validos()
+        # self.view.mostrar_msg_dados_validos()
 
-        # Atualiza o Model
+        # # Atualiza o Model
+        # self.model.texto = texto.split("\n")
+        # self.model.num_destinatarios = int(num_destinatarios)
+        # # Inicia a codificação
+        # self.codificar_texto()
+
+        # Atualiza o Model (não chama diretamente métodos da View)
         self.model.texto = texto.split("\n")
-        self.model.num_destinatarios = int(num_destinatarios)
-        # Inicia a codificação
+        self.model.num_destinatarios = num_destinatarios
+        # Valida e notifica via evento
+        if not self.model.validar_dados(self.model.texto, self.model.num_destinatarios):
+            self.model.notificar_observadores(evento="dados_invalidos")
+            return
+        self.model.notificar_observadores(evento="dados_validos")
+        # Inicia a codificação (pode ser disparada por evento também, se preferir)
         self.codificar_texto()
 
     # [Alteração DEV3 - Corrigido método duplicado]
@@ -77,8 +111,9 @@ class Controller:
             return
             
         except Exception as e:
-            print(f"Erro na codificação: {e}")
-            self.programa_encerrado()
+            self.model.notificar_observadores(evento="erro_escrita")
+            # print(f"Erro na codificação: {e}")
+            # self.programa_encerrado()
 
     def programa_encerrado(self):
         self.view.mostrar_msg_final()
