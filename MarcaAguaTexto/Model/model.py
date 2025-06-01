@@ -51,18 +51,20 @@ class Model(IModel):
             num_destinatarios_int = int(num_destinatarios)
         except Exception as e:
             #return False
-            self.notificar_observadores(evento="erro_num_destinatarios", erro="Adicionar um número no campo dos destinatários.")
+            self.notificar_observadores(evento="erro_num_destinatarios")
+            return False
 
         self.num_destinatarios = num_destinatarios_int
         
         if not (1 <= num_destinatarios_int < MAX_NUM_DESTINATARIOS):
-            self.notificar_observadores(evento="erro_num_destinatarios", erro=f"Número de destinatários tem de estar entre 1 e 509.")
+            self.notificar_observadores(evento="erro_num_destinatarios")
             return False
 
         num_espacos = sum(linha.count(" ") for linha in texto)
         if num_espacos < MIN_TEXT_SPACES:
-            self.notificar_observadores(evento="erro_texto", erro="Número de espaços no texto insuficiente.")
+            self.notificar_observadores(evento="erro_texto")
             return False
+
         self.notificar_observadores(evento="dados_validos")
         return True
 

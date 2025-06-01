@@ -1,25 +1,10 @@
-from MarcaAguaTexto.Model.model import IModel
-
 import tkinter as tk
 from tkinter import ttk
-from tkinter import PhotoImage
 
 # Interface da classe View
 class IView:
     def ativar_boas_vindas(self):
         raise NotImplementedError
-
-    def ativar_rotulo_prompt(self):
-        raise NotImplementedError
-
-    def ativar_rotulo_dados(self):
-        raise NotImplementedError
-
-    def submeter_dados(self):
-        raise NotImplementedError
-
-    def notificar_dados_submetidos(self):
-         raise NotImplementedError
 
     def mostrar_msg_em_curso(self):
         raise NotImplementedError
@@ -33,13 +18,15 @@ class IView:
     def mostrar_msg_dados_invalidos(self):
         raise NotImplementedError
 
+    def mostrar_msg_erro_na_codificacao(self):
+        raise NotImplementedError
+
     def mostrar_msg_final(self):
         raise NotImplementedError
 
 # Classe View
 class View(IView):
-    def __init__(self, model: IModel, controller=None, on_submit_callback=None):
-        self.model = model
+    def __init__(self, on_submit_callback=None):
         self.root = tk.Tk()
         print("Janela iniciada")  # Debug Dev2
         self.content_frame = None #Inicializar global em vez de local para que os elementos possam ser adicionados
@@ -175,24 +162,6 @@ class View(IView):
         self.num_destinatarios_input = tk.Entry(self.content_frame, width=10, bg="#444444", fg="white", insertbackground="white")
         self.num_destinatarios_input.pack(pady=(0, 10))
 
-    def ativar_rotulo_dados(self):
-        # Apresentar o texto e o número de destinatários ao utilizador
-        resumo = f"Texto submetido:\n{self.model.texto}\n\nNúmero de destinatários: {self.model.num_destinatarios}"
-        # Se já existir um label de resumo, destrua-o antes de criar outro
-        if hasattr(self, 'resumo_label') and self.resumo_label.winfo_exists():
-            self.resumo_label.destroy()
-        self.resumo_label = ttk.Label(
-            self.content_frame,
-            text=resumo,
-            background="#2E2E2E",
-            foreground="white",
-            font=("Arial", 11),
-            justify="left",
-            wraplength=360
-        )
-        self.resumo_label.pack(pady=(10, 10))
-
-
     def submeter_dados(self):
         start_button = tk.Button(self.sidebar_frame, text="Iniciar WM", command=self.notificar_dados_submetidos, bg="#808080", fg="white", width=20, height=2)
         start_button.pack(pady=10)
@@ -212,9 +181,6 @@ class View(IView):
         # Se o callback estiver definido, chama-o
         if self.on_submit_callback:
             self.on_submit_callback(texto, num_destinatarios)
-
-        # DEBUG TEMP DEV3
-        print(f"Número de espaços no texto: {sum(linha.count(' ') for linha in self.model.texto)}")
 
     def mostrar_msg_em_curso(self):
         self.status_label.config(text=f"Operação em curso...")

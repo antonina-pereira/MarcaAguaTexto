@@ -8,7 +8,7 @@ if __name__ == "__main__":
     model = Model()
     #view = View(model)
     controller = Controller(model)
-    view = View(model, on_submit_callback=controller.receber_dados_submetidos)
+    view = View(on_submit_callback=controller.receber_dados_submetidos)
 
     controller.set_view(view)  
 

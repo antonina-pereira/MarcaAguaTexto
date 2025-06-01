@@ -22,15 +22,16 @@ class Controller:
         :param evento: evento disparado pelo modelo
         :param kwargs: argumentos adicionais do evento
         """
-        msg_erro = kwargs.get("erro", "")
         # Verifica o tipo de evento e chama o método correspondente na vista
         if evento == "dados_validos":
             self.view.mostrar_msg_dados_validos()
         elif evento == "erro_num_destinatarios":
+            msg_erro = "Adicionar um número no campo dos destinatários."
             self.view.mostrar_msg_dados_invalidos(msg_erro)
             # Encerra o programa se os dados forem inválidos
             self.view.root.after(3000, self.programa_encerrado)
         elif evento == "erro_texto":
+            msg_erro = "Número de destinatários tem de estar entre 1 e 509."
             self.view.mostrar_msg_dados_invalidos(msg_erro)
             # Encerra o programa se os dados forem inválidos
             self.view.root.after(3000, self.programa_encerrado)
