@@ -17,6 +17,7 @@ class Controller:
         self.encoder = WmkControllerEncoding()
 
     def evento_modelo(self, evento, **kwargs):
+        assert self.view is not None, "A View não foi inicializada no Controller."
         """
         Método para lidar com eventos do modelo e notificar a vista.
         :param evento: evento disparado pelo modelo
@@ -28,16 +29,17 @@ class Controller:
             self.view.mostrar_msg_dados_validos()
         elif evento == "erro_num_destinatarios":
             msg_erro = self.traduzir_erro_num_destinatarios(codigo)
-            self.view.mostrar_msg_dados_invalidos(msg_erro)
+            self.view.mostrar_msg_erro(msg_erro)
             # Encerra o programa se os dados forem inválidos
             self.view.root.after(3000, self.programa_encerrado)
         elif evento == "erro_texto":
             msg_erro = self.traduzir_erro_texto(codigo)
-            self.view.mostrar_msg_dados_invalidos(msg_erro)
+            self.view.mostrar_msg_erro(msg_erro)
             # Encerra o programa se os dados forem inválidos
             self.view.root.after(3000, self.programa_encerrado)
         elif evento == "erro_escrita":
-            self.view.mostrar_msg_erro_na_codificacao()
+            msg_erro = self.traduzir_erro_escrita(codigo)
+            self.view.mostrar_msg_erro(msg_erro)
             self.programa_encerrado()
 
     
@@ -66,25 +68,12 @@ class Controller:
 
     # DEV2 - Alterei o espaçamento anterior para verificar a def abaixo. -- Nenhuma outra alteração
     def iniciar_programa(self):
+        assert self.view is not None, "A View não foi inicializada no Controller."
         self.view.ativar_boas_vindas()
         self.view.run()
 
     def receber_dados_submetidos(self, texto, num_destinatarios):
-        # # Valida os dados submetidos
-        # if(not self.model.validar_dados(texto, num_destinatarios)):
-        #     self.view.mostrar_msg_dados_invalidos()
-        #     # Encerra o programa se os dados forem inválidos
-        #     self.view.root.after(3000, self.programa_encerrado)
-        #     return
-        
-        # self.view.mostrar_msg_dados_validos()
-
-        # # Atualiza o Model
-        # self.model.texto = texto.split("\n")
-        # self.model.num_destinatarios = int(num_destinatarios)
-        # # Inicia a codificação
-        # self.codificar_texto()
-
+        assert self.model is not None, "O Model não foi inicializado no Controller."
         # Atualiza o Model (não chama diretamente métodos da View)
         self.model.texto = texto.split("\n")
         self.model.num_destinatarios = num_destinatarios
@@ -98,6 +87,8 @@ class Controller:
 
     # [Alteração DEV3 - Corrigido método duplicado]
     def codificar_texto(self):
+        assert self.view is not None, "A View não foi inicializada no Controller."
+        assert self.model is not None, "O Model não foi inicializado no Controller."
         """
         Executa o processo de codificação do texto para todos os destinatários,
         utilizando espaços e espaços ininterruptos para representar os bits.
@@ -138,6 +129,7 @@ class Controller:
             # self.programa_encerrado()
 
     def programa_encerrado(self):
+        assert self.view is not None, "A View não foi inicializada no Controller."
         self.view.mostrar_msg_final()
         if hasattr(self.view, "root") and self.view.root is not None:
             self.view.root.after(3000, self.view.root.destroy)

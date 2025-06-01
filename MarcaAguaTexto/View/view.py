@@ -6,6 +6,9 @@ class IView:
     def ativar_boas_vindas(self):
         raise NotImplementedError
 
+    def run(self):
+        raise NotImplementedError
+
     def mostrar_msg_em_curso(self):
         raise NotImplementedError
 
@@ -15,10 +18,7 @@ class IView:
     def mostrar_msg_dados_validos(self):
         raise NotImplementedError
 
-    def mostrar_msg_dados_invalidos(self):
-        raise NotImplementedError
-
-    def mostrar_msg_erro_na_codificacao(self):
+    def mostrar_msg_erro(self, msg_erro):
         raise NotImplementedError
 
     def mostrar_msg_final(self):
@@ -191,11 +191,8 @@ class View(IView):
     def mostrar_msg_dados_validos(self):
         self.status_label.config(text=f"Os dados submetidos são válidos.")
 
-    def mostrar_msg_dados_invalidos(self, msg_erro):
+    def mostrar_msg_erro(self, msg_erro):
         self.status_label.config(text=f"{msg_erro}")
-
-    def mostrar_msg_erro_na_codificacao(self):
-        self.status_label.config(text=f"Ocorreu um erro na codificação.")
 
     def mostrar_msg_final(self):
         self.status_label.config(text=f"Programa a encerrar...")
