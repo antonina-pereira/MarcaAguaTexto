@@ -22,16 +22,17 @@ class Controller:
         :param evento: evento disparado pelo modelo
         :param kwargs: argumentos adicionais do evento
         """
+        codigo = kwargs.get("codigo", "")
         # Verifica o tipo de evento e chama o método correspondente na vista
         if evento == "dados_validos":
             self.view.mostrar_msg_dados_validos()
         elif evento == "erro_num_destinatarios":
-            msg_erro = "Adicionar um número no campo dos destinatários."
+            msg_erro = self.traduzir_erro_num_destinatarios(codigo)
             self.view.mostrar_msg_dados_invalidos(msg_erro)
             # Encerra o programa se os dados forem inválidos
             self.view.root.after(3000, self.programa_encerrado)
         elif evento == "erro_texto":
-            msg_erro = "Número de destinatários tem de estar entre 1 e 509."
+            msg_erro = self.traduzir_erro_texto(codigo)
             self.view.mostrar_msg_dados_invalidos(msg_erro)
             # Encerra o programa se os dados forem inválidos
             self.view.root.after(3000, self.programa_encerrado)
@@ -39,6 +40,26 @@ class Controller:
             self.view.mostrar_msg_erro_na_codificacao()
             self.programa_encerrado()
 
+    
+    def traduzir_erro_num_destinatarios(self, codigo):
+        if codigo == "NUM_DEST_NAO_NUMERO":
+            return "Adicionar um número no campo dos destinatários."
+        elif codigo == "NUM_DEST_FORA_INTERVALO":
+            return "Número de destinatários tem de estar entre 1 e 509."
+        else:
+            return "Erro desconhecido no campo destinatários."
+
+    def traduzir_erro_texto(self, codigo):
+        if codigo == "ESPACOS_FORA_INTERVALO":
+            return "Número de espaços no texto insuficiente."
+        else:
+            return "Erro desconhecido no texto."
+
+    def traduzir_erro_escrita(self, codigo):
+        if codigo == "ERRO_IO":
+            return "Erro ao escrever o ficheiro."
+        else:
+            return "Erro desconhecido na codificação do texto."
 
     def set_view(self, view: IView):
         self.view = view

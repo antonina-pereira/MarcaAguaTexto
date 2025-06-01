@@ -49,20 +49,20 @@ class Model(IModel):
         # Verifica se num_destinatarios é um número
         try:
             num_destinatarios_int = int(num_destinatarios)
-        except Exception as e:
+        except Exception:
             #return False
-            self.notificar_observadores(evento="erro_num_destinatarios")
+            self.notificar_observadores(evento="erro_num_destinatarios", codigo="NUM_DEST_NAO_NUMERO")
             return False
 
         self.num_destinatarios = num_destinatarios_int
         
         if not (1 <= num_destinatarios_int < MAX_NUM_DESTINATARIOS):
-            self.notificar_observadores(evento="erro_num_destinatarios")
+            self.notificar_observadores(evento="erro_num_destinatarios", codigo="NUM_DEST_FORA_INTERVALO")
             return False
 
         num_espacos = sum(linha.count(" ") for linha in texto)
         if num_espacos < MIN_TEXT_SPACES:
-            self.notificar_observadores(evento="erro_texto")
+            self.notificar_observadores(evento="erro_texto", codigo="ESPACOS_FORA_INTERVALO")
             return False
 
         self.notificar_observadores(evento="dados_validos")
@@ -79,4 +79,4 @@ class Model(IModel):
                 print(f"[Destinatário {destinatario}] Ficheiro '{nome_ficheiro}' criado com texto codificado.")
                 print(texto_codificado[:100] + "...\n")
         except Exception as e:
-            self.notificar_observadores(evento="erro_escrita", erro=str(e))
+            self.notificar_observadores(evento="erro_escrita", codigo="ERRO_IO")
